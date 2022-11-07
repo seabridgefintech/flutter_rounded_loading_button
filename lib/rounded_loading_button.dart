@@ -99,7 +99,7 @@ class RoundedLoadingButton extends StatefulWidget {
     required this.onPressed,
     required this.child,
     this.color = Colors.lightBlue,
-    this.borderColor = Colors.black54,
+    this.borderColor = Colors.lightBlue,
     this.borderThickness = 0,
     this.height = 50,
     this.width = 300,
@@ -148,15 +148,15 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
       decoration: BoxDecoration(
         color: widget.successColor ?? theme.primaryColor,
         borderRadius:
-            BorderRadius.all(Radius.circular(_bounceAnimation.value / 2)),
+        BorderRadius.all(Radius.circular(_bounceAnimation.value / 2)),
       ),
       width: _bounceAnimation.value,
       height: _bounceAnimation.value,
       child: _bounceAnimation.value > 20
           ? Icon(
-              widget.successIcon,
-              color: widget.valueColor,
-            )
+        widget.successIcon,
+        color: widget.valueColor,
+      )
           : null,
     );
 
@@ -165,15 +165,15 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
       decoration: BoxDecoration(
         color: widget.errorColor,
         borderRadius:
-            BorderRadius.all(Radius.circular(_bounceAnimation.value / 2)),
+        BorderRadius.all(Radius.circular(_bounceAnimation.value / 2)),
       ),
       width: _bounceAnimation.value,
       height: _bounceAnimation.value,
       child: _bounceAnimation.value > 20
           ? Icon(
-              widget.failedIcon,
-              color: widget.valueColor,
-            )
+        widget.failedIcon,
+        color: widget.valueColor,
+      )
           : null,
     );
 
@@ -196,6 +196,7 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
       },
     );
 
+
     final _btn = ButtonTheme(
       shape: RoundedRectangleBorder(borderRadius: _borderAnimation.value),
       disabledColor: widget.disabledColor,
@@ -204,10 +205,11 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
         style: ElevatedButton.styleFrom(
           onSurface: widget.disabledColor,
           minimumSize: Size(_squeezeAnimation.value, widget.height),
-          shape: RoundedRectangleBorder(
+          shape: widget.borderThickness > 0 ? RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
             side: BorderSide(width: widget.borderThickness, color: widget.borderColor),
-          ),
+          ) : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(widget.borderRadius)),
           primary: widget.color,
           elevation: widget.elevation,
           padding: const EdgeInsets.all(0),
@@ -223,9 +225,10 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
         child: _state.value == ButtonState.error
             ? _cross
             : _state.value == ButtonState.success
-                ? _check
-                : _btn,
-      ),
+            ? _check
+            : _btn,
+      )
+      ,
     );
   }
 
@@ -254,8 +257,8 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
 
     _squeezeAnimation =
         Tween<double>(begin: widget.width, end: widget.height).animate(
-      CurvedAnimation(parent: _buttonController, curve: widget.curve),
-    );
+          CurvedAnimation(parent: _buttonController, curve: widget.curve),
+        );
 
     _squeezeAnimation.addListener(() {
       setState(() {});
@@ -352,13 +355,11 @@ class RoundedLoadingButtonController {
   VoidCallback? _errorListener;
   VoidCallback? _resetListener;
 
-  void _addListeners(
-    VoidCallback startListener,
-    VoidCallback stopListener,
-    VoidCallback successListener,
-    VoidCallback errorListener,
-    VoidCallback resetListener,
-  ) {
+  void _addListeners(VoidCallback startListener,
+      VoidCallback stopListener,
+      VoidCallback successListener,
+      VoidCallback errorListener,
+      VoidCallback resetListener,) {
     _startListener = startListener;
     _stopListener = stopListener;
     _successListener = successListener;
@@ -367,7 +368,7 @@ class RoundedLoadingButtonController {
   }
 
   final BehaviorSubject<ButtonState> _state =
-      BehaviorSubject<ButtonState>.seeded(ButtonState.idle);
+  BehaviorSubject<ButtonState>.seeded(ButtonState.idle);
 
   /// A read-only stream of the button state
   Stream<ButtonState> get stateStream => _state.stream;
