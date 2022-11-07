@@ -24,6 +24,12 @@ class RoundedLoadingButton extends StatefulWidget {
   /// The primary color of the button
   final Color? color;
 
+  /// The color of the button's outline border
+  final Color borderColor;
+
+  /// The thickness of the button's outline border
+  final double borderThickness;
+
   /// The vertical extent of the button.
   final double height;
 
@@ -93,6 +99,8 @@ class RoundedLoadingButton extends StatefulWidget {
     required this.onPressed,
     required this.child,
     this.color = Colors.lightBlue,
+    this.borderColor = Colors.black54,
+    this.borderThickness = 0,
     this.height = 50,
     this.width = 300,
     this.loaderSize = 24.0,
@@ -198,6 +206,7 @@ class RoundedLoadingButtonState extends State<RoundedLoadingButton>
           minimumSize: Size(_squeezeAnimation.value, widget.height),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius),
+            side: BorderSide(width: widget.borderThickness, color: widget.borderColor),
           ),
           primary: widget.color,
           elevation: widget.elevation,
